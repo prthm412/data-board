@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import DataPage from "./pages/DataPage";
+import AnalyticsPage from "./pages/AnalyticsPage";
 
 function App() {
   return (
@@ -26,6 +27,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <DataPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <ProtectedRoute>
+                <AnalyticsPage />
               </ProtectedRoute>
             }
           />
