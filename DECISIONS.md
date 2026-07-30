@@ -19,3 +19,7 @@ Short notes on choices made and why.
 - **Plot response shape**: returns `col1`/`col2` as fixed keys per data point (not the actual column names) so the frontend chart code doesn't need to know column names to render — it just reads `.col1`/`.col2`. Real column names still returned separately for axis labels.
 
 - **CORS**: backend needed explicit CORS middleware to accept requests from the frontend dev server origin (`localhost:5173`), otherwise browser blocks all API calls from the frontend.
+
+- **Known issue hit**: scatter chart hardcoded a numeric X-axis, so plotting a text column (e.g. `city`, `name`) against a numeric one rendered empty/broken. Fixed by detecting whether X values are numeric and falling back to a category axis when they're not — same axis type line/bar charts already used.
+  
+- **Known issue hit**: nginx served the frontend correctly at `/`, but returned 404 on direct navigation or refresh at any other route (`/login`, `/data`, etc.) — because those routes only exist in React Router's client-side JS, not as real files. Fixed with `try_files $uri $uri/ /index.html` in nginx config so unmatched paths fall through to the SPA.
