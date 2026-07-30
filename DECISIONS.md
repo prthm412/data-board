@@ -15,3 +15,5 @@ Short notes on choices made and why.
 - **Pagination verified**: tested `GET /dataset` with 3 datasets, `limit=2`. page 1 returned 2 items, page 2 returned 1 item, `total` correct on both. Confirms it's real offset-based pagination, not stubbed.
 
 - **Known issue hit**: pandas represents empty numeric columns as `float64` NaN, and re-assigning `None` via `df.where(pd.notnull(df), None)` doesn't stick for numeric dtypes. pandas silently converts it back to NaN. Postgres's JSON column type rejects NaN outright (invalid JSON). Fixed by converting to dict first, then replacing NaN with None per-value using `math.isnan()` before insert.
+
+- **Plot response shape**: returns `col1`/`col2` as fixed keys per data point (not the actual column names) so the frontend chart code doesn't need to know column names to render — it just reads `.col1`/`.col2`. Real column names still returned separately for axis labels.
