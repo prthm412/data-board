@@ -162,3 +162,29 @@ def compute_stat(
         result = sum(numeric_values)
 
     return {"column": payload.column, "operation": payload.operation, "result": result}
+
+
+@router.get("/{dataset_id}/plot", response_model=schemas.PlotResponse)
+def plot_dataset(
+    dataset_id: int,
+    col1: str = Query(...),
+    col2: str = Query(...),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    dataset = _get_owned_dataset(dataset_id, db, current_user)
+
+    for col in (col1, col2):
+        if col not in dataset.column_names:
+            raise HTTPException(status_code=400, detail=f"Column '{col}' not found in dataset")
+
+    rows = (
+        db.query(models.DatasetRow)
+        .filter(models.DatasetRow.dataset_id == dataset.id)
+        .order_by(models.DatasetRow.row_index)
+        .limit(30)
+        .all()
+    )
+
+    data = [{"col1": row.data.get(col1), "col2": row.data.get(col2)} for row in rows]
+    return {"col1": col1, "col2": col2, "data": data}

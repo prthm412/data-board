@@ -54,3 +54,9 @@ class ComputeResponse(BaseModel):
     column: str
     operation: str
     result: Union[float, int]
+
+
+class PlotResponse(BaseModel):
+    col1: str
+    col2: str
+    data: List[dict]
