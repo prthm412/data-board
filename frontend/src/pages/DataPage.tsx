@@ -37,7 +37,10 @@ export default function DataPage() {
   };
 
   useEffect(() => {
-    loadDatasets(1);
+    const load = async () => {
+      await loadDatasets(1);
+    };
+    load();
   }, []);
 
   const handleUpload = async (e: FormEvent<HTMLFormElement>) => {
