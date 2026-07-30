@@ -68,8 +68,12 @@ export default function AnalyticsPage() {
       const xValues = res.data.map((p) => p.col1 as string | number);
       const yValues = res.data.map((p) => p.col2 as number);
 
+      const isNumericX = xValues.every(
+        (v) => v !== null && v !== "" && !isNaN(Number(v))
+      );
+
       let option: Record<string, unknown>;
-      if (chartType === "scatter") {
+      if (chartType === "scatter" && isNumericX) {
         option = {
           xAxis: { name: res.col1, type: "value" },
           yAxis: { name: res.col2, type: "value" },
