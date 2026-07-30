@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.routers import auth
+from app.routers import auth, datasets
 
 app = FastAPI(
     title="xVectorLabs Data App",
@@ -9,6 +9,7 @@ app = FastAPI(
 )
 
 app.include_router(auth.router)
+app.include_router(datasets.router)
 
 
 @app.get("/health")
