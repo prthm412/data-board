@@ -1,4 +1,5 @@
 import io
+import math
 
 import pandas as pd
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Query, status
@@ -30,14 +31,19 @@ def upload_dataset(
     if len(df.columns) == 0:
         raise HTTPException(status_code=400, detail="CSV file has no columns")
 
-    df = df.where(pd.notnull(df), None)
     column_names = list(df.columns)
 
     dataset = models.Dataset(name=name, owner_id=current_user.id, column_names=column_names)
     db.add(dataset)
     db.flush()
 
-    for idx, row in enumerate(df.to_dict(orient="records")):
+    records = df.to_dict(orient="records")
+    for record in records:
+        for key, value in record.items():
+            if isinstance(value, float) and math.isnan(value):
+                record[key] = None
+
+    for idx, row in enumerate(records):
         db.add(models.DatasetRow(dataset_id=dataset.id, row_index=idx, data=row))
 
     db.commit()

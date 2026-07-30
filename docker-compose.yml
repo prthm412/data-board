@@ -11,5 +11,15 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  test_db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: xvector
+      POSTGRES_PASSWORD: xvector_dev_pw
+      POSTGRES_DB: xvector_test_db
+    ports:
+      - "5433:5432"
+
 volumes:
   pgdata:
