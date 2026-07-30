@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Literal, Union
 
 from pydantic import BaseModel, EmailStr
 
@@ -43,3 +43,14 @@ class DatasetPreviewOut(BaseModel):
     columns: List[str]
     rows: List[dict]
     total_rows: int
+
+
+class ComputeRequest(BaseModel):
+    column: str
+    operation: Literal["min", "max", "sum"]
+
+
+class ComputeResponse(BaseModel):
+    column: str
+    operation: str
+    result: Union[float, int]
