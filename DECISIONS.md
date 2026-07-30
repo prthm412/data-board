@@ -17,3 +17,5 @@ Short notes on choices made and why.
 - **Known issue hit**: pandas represents empty numeric columns as `float64` NaN, and re-assigning `None` via `df.where(pd.notnull(df), None)` doesn't stick for numeric dtypes. pandas silently converts it back to NaN. Postgres's JSON column type rejects NaN outright (invalid JSON). Fixed by converting to dict first, then replacing NaN with None per-value using `math.isnan()` before insert.
 
 - **Plot response shape**: returns `col1`/`col2` as fixed keys per data point (not the actual column names) so the frontend chart code doesn't need to know column names to render — it just reads `.col1`/`.col2`. Real column names still returned separately for axis labels.
+
+- **CORS**: backend needed explicit CORS middleware to accept requests from the frontend dev server origin (`localhost:5173`), otherwise browser blocks all API calls from the frontend.
