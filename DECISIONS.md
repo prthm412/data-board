@@ -23,3 +23,7 @@ Short notes on choices made and why.
 - **Known issue hit**: scatter chart hardcoded a numeric X-axis, so plotting a text column (e.g. `city`, `name`) against a numeric one rendered empty/broken. Fixed by detecting whether X values are numeric and falling back to a category axis when they're not — same axis type line/bar charts already used.
   
 - **Known issue hit**: nginx served the frontend correctly at `/`, but returned 404 on direct navigation or refresh at any other route (`/login`, `/data`, etc.) — because those routes only exist in React Router's client-side JS, not as real files. Fixed with `try_files $uri $uri/ /index.html` in nginx config so unmatched paths fall through to the SPA.
+
+- **AuthContext split into 3 files**: `AuthContext.ts` (context + type), `AuthProvider.tsx` (component), `useAuth.ts` (hook) — required by ESLint's `react-refresh/only-export-components` rule, which wants files to export either only components or only non-components, not both, for Vite fast-refresh to work reliably.
+  
+- **DataPage effect wrapped in async function**: `react-hooks/set-state-in-effect` rule flagged calling `loadDatasets` (which sets state) directly in `useEffect`. Wrapped in an inner `async function` — standard pattern for async work inside effects, not a functional change.
