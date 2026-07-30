@@ -11,3 +11,5 @@ Short notes on choices made and why.
 - **Auth style**: register/login take plain JSON `{email, password}` and return a JWT, per spec ("Returns JWT"). Not using FastAPI's default OAuth2 form-login,  that expects `application/x-www-form-urlencoded` username/password, which doesn't match the spec's JSON contract. Used `HTTPBearer` for protected-route auth instead of `OAuth2PasswordBearer`, since the latter assumes the form-login flow even for Swagger's UI.
   
 - **Known issue hit**: `passlib`'s bcrypt backend breaks on newer `bcrypt` (>=4.1) due to a removed `__about__` attribute it checks for. Pinned `bcrypt==4.0.1` to fix.
+
+- **Pagination verified**: tested `GET /dataset` with 3 datasets, `limit=2`. page 1 returned 2 items, page 2 returned 1 item, `total` correct on both. Confirms it's real offset-based pagination, not stubbed.
