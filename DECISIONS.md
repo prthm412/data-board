@@ -13,3 +13,5 @@ Short notes on choices made and why.
 - **Known issue hit**: `passlib`'s bcrypt backend breaks on newer `bcrypt` (>=4.1) due to a removed `__about__` attribute it checks for. Pinned `bcrypt==4.0.1` to fix.
 
 - **Pagination verified**: tested `GET /dataset` with 3 datasets, `limit=2`. page 1 returned 2 items, page 2 returned 1 item, `total` correct on both. Confirms it's real offset-based pagination, not stubbed.
+
+- **Known issue hit**: pandas represents empty numeric columns as `float64` NaN, and re-assigning `None` via `df.where(pd.notnull(df), None)` doesn't stick for numeric dtypes. pandas silently converts it back to NaN. Postgres's JSON column type rejects NaN outright (invalid JSON). Fixed by converting to dict first, then replacing NaN with None per-value using `math.isnan()` before insert.
