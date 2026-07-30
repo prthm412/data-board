@@ -41,7 +41,13 @@ _(to be filled in)_
 
 ## JWT strategy
 
-_(to be filled in)_
+Single short-lived JWT (default 30 min, see `.env`), issued on login, no refresh
+token endpoint. When it expires, the client re-authenticates via `/auth/login`.
+
+Chosen over a refresh-token flow because the added complexity (rotation, revocation,
+secure storage of a second token) isn't justified at this project's scope. In a
+production system handling sensitive data or requiring longer sessions, a rotating
+refresh token with revocation on logout would be the next step.
 
 ## Technical assumptions
 
